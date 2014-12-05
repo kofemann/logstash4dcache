@@ -14,3 +14,16 @@ ACCESSGFTPCMDCLEAR (%{WORD:command_verb}$|%{WORD:command_verb} %{GREEDYDATA:comm
 
 ACCESSGFTPREPLY %{ACCESSGFTPREPLYENC}|%{ACCESSGFTPREPLYCLEAR}
 ACCESSGFTPCMD %{ACCESSGFTPCMDENC}|%{ACCESSGFTPCMDCLEAR}
+
+XROOTDGEN level=%{WORD:level} ts=%{TIMESTAMP_ISO8601:access_time} event=%{DATA:event} session=%{WORD:celltype}\:%{DATA:domain}:%{DATA:session}
+
+ACCESSXROOTDREQTOKEN %{XROOTDGEN} request=%{WORD:request} username=%{WORD:user} capver=%{INT:capver} pid=%{NUMBER:pid} token=%{DATA:token} response=%{WORD:response} sessionId=%{BASE16NUM:sessionid}$
+ACCESSXROOTDSTART %{XROOTDGEN} socket.remote=%{IP:socket_remote}:%{NUMBER:socket_remote_port} socket.local=%{IP:socket_local}:%{NUMBER:socket_local_port}$
+ACCESSXROOTDREQERROR %{XROOTDGEN} request=%{WORD:request} path=%{PATH:file_path} response=%{WORD:response} error.code=%{DATA:access_error_code} error.msg="%{DATA:error_msg}"$
+ACCESSXROOTDREQ %{XROOTDGEN} request=%{WORD:request} path=%{DATA:file_path} options=%{DATA:options} response=%{WORD:response} host=%{IP:socket_remote} port=%{NUMBER:port}$
+ACCESSXROOTDREQOK %{XROOTDGEN} request=%{WORD:request} path=%{PATH:file_path} response=%{WORD:response} flags=%{INT:flags} size=%{NUMBER:size}$
+ACCESSXROOTD2 %{XROOTDGEN} request=%{WORD:request} response=%{WORD:response}$
+ACCESSXROOTD3 %{XROOTDGEN} request=%{WORD:request}$
+ACCESSXROOTD4 %{XROOTDGEN} user=%{WORD:user}$
+
+ACCESSXROOTD %{ACCESSXROOTDREQTOKEN}|%{ACCESSXROOTDSTART}|%{ACCESSXROOTDREQERROR}|%{ACCESSXROOTDREQ}|%{ACCESSXROOTDREQOK}|%{ACCESSXROOTD2}|%{ACCESSXROOTD3}|%{ACCESSXROOTD4}|%{XROOTDGEN}
